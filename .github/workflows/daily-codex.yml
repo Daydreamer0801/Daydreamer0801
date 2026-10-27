@@ -1,0 +1,32 @@
+name: Daily Codex
+
+on:
+  schedule:
+    - cron: '0 7 * * *'
+      timezone: 'Asia/Shanghai'
+
+  # 方便你手动测试
+  workflow_dispatch:
+
+jobs:
+  codex:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run Codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+
+          prompt: |
+            检查当前项目代码。
+            找出潜在 Bug、代码质量问题以及可以优化的地方。
+            输出一份检查报告。
+
+          permission-profile: ":read-only"
